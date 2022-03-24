@@ -2,14 +2,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CheckboxOutline } from "react-ionicons";
 import { TrashOutline } from "react-ionicons";
+import { deleteBucket, updateBucket } from "./redux/modules/bucket";
 
 const BucketList = (props) => {
   const navigate = useNavigate();
-
   const my_lists = useSelector((state) => state.bucket.list);
+  const dispatch = useDispatch();
 
   const bucket_icon = {
     cursor: "pointer",
@@ -19,17 +20,18 @@ const BucketList = (props) => {
     <ListStyle>
       {my_lists.map((list, index) => {
         return (
-          <ItemStyle
-            completed={list.completed}
-            key={index}
-            onClick={() => {
-              navigate("/detail/" + index);
-            }}
-          >
-            {list.text}
+          <ItemStyle completed={list.completed} key={index}>
+            <span
+              onClick={() => {
+                navigate("/detail/" + index);
+              }}
+            >
+              {list.text}
+            </span>
             <div>
               {list.completed ? null : (
                 <CheckboxOutline
+                  onClick={() => dispatch(updateBucket(index))}
                   width="30px"
                   height="30px"
                   color="green"
@@ -37,6 +39,7 @@ const BucketList = (props) => {
                 />
               )}
               <TrashOutline
+                onClick={() => dispatch(deleteBucket(index))}
                 width={"30px"}
                 height="30px"
                 color={list.completed ? "#fff" : "tomato"}

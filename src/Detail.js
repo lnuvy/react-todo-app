@@ -10,8 +10,6 @@ const Detail = () => {
   const bucket_index = parseInt(params.index);
   const bucket_list = useSelector((state) => state.bucket.list);
 
-  console.log(bucket_list, bucket_index);
-
   return (
     <div>
       <h1>{bucket_list[bucket_index].text}</h1>

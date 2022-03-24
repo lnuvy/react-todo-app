@@ -7,10 +7,13 @@ import { useDispatch } from "react-redux";
 import { createBucket } from "./redux/modules/bucket";
 import Progress from "./Progress";
 import NotFound from "./NotFound";
+import { db } from "./firebase";
 
 function App() {
   const text = useRef(null);
   const dispatch = useDispatch();
+
+  console.log(db);
 
   const addBucket = () => {
     dispatch(createBucket(text.current.value));
