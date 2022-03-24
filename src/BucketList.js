@@ -1,59 +1,143 @@
 // 리액트 패키지를 불러옵니다.
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { CheckboxOutline } from "react-ionicons";
 import { TrashOutline } from "react-ionicons";
+import { CheckmarkOutline } from "react-ionicons";
+import { CloseOutline } from "react-ionicons";
+
 import { deleteBucket, updateBucket } from "./redux/modules/bucket";
 
-const BucketList = (props) => {
+const BucketList = () => {
+  const [checkConfirm, setCheckConfirm] = useState(null);
+  const [removeConfirm, setRemoveConfirm] = useState(null);
   const navigate = useNavigate();
   const my_lists = useSelector((state) => state.bucket.list);
   const dispatch = useDispatch();
 
-  const bucket_icon = {
+  console.log(my_lists);
+
+  const pointerStyle = {
     cursor: "pointer",
+  };
+  const testStyle = {
+    padding: "0 100px 0 0",
+  };
+
+  const handleCancel = () => {
+    setCheckConfirm(null);
+    setRemoveConfirm(null);
+  };
+
+  const handleConfirm = (index, type) => {
+    console.log(type);
+    switch (type) {
+      case "check":
+        dispatch(updateBucket(index));
+        setCheckConfirm(null);
+        break;
+      case "remove":
+        dispatch(deleteBucket(index));
+        setRemoveConfirm(null);
+        break;
+      default:
+        return;
+    }
   };
 
   return (
-    <ListStyle>
+    <BucketDiv>
       {my_lists.map((list, index) => {
-        return (
-          <ItemStyle completed={list.completed} key={index}>
-            <span
-              onClick={() => {
-                navigate("/detail/" + index);
-              }}
+        if (checkConfirm === index)
+          return (
+            <ItemStyle
+              style={{ background: "#17ef178a" }}
+              key={`confirm_${index}`}
             >
-              {list.text}
-            </span>
-            <div>
-              {list.completed ? null : (
-                <CheckboxOutline
-                  onClick={() => dispatch(updateBucket(index))}
+              "{list.text}" 완료하셨나요 ?
+              <div>
+                <CheckmarkOutline
                   width="30px"
                   height="30px"
                   color="green"
-                  style={bucket_icon}
+                  style={pointerStyle}
+                  onClick={() => handleConfirm(index, "check")}
                 />
-              )}
-              <TrashOutline
-                onClick={() => dispatch(deleteBucket(index))}
-                width={"30px"}
-                height="30px"
-                color={list.completed ? "#fff" : "tomato"}
-                style={bucket_icon}
-              />
-            </div>
-          </ItemStyle>
-        );
+                <CloseOutline
+                  width="30px"
+                  height="30px"
+                  color="red"
+                  style={pointerStyle}
+                  onClick={handleCancel}
+                />
+              </div>
+            </ItemStyle>
+          );
+        else if (removeConfirm === index)
+          return (
+            <ItemStyle
+              style={{ background: "#ff5722d1" }}
+              key={`remove_${index}`}
+            >
+              "{list.text}" 삭제할까요 ?
+              <div>
+                <CheckmarkOutline
+                  width="30px"
+                  height="30px"
+                  color="green"
+                  style={pointerStyle}
+                  onClick={() => handleConfirm(index, "remove")}
+                />
+                <CloseOutline
+                  width="30px"
+                  height="30px"
+                  color="red"
+                  style={pointerStyle}
+                  onClick={handleCancel}
+                />
+              </div>
+            </ItemStyle>
+          );
+        // 기본 리스트
+        else
+          return (
+            <ItemStyle completed={list.completed} key={`view_${index}`}>
+              <span
+                style={(pointerStyle, testStyle)}
+                onClick={() => {
+                  navigate("/detail/" + index);
+                }}
+              >
+                {list.text}
+              </span>
+              <div>
+                {list.completed ? null : (
+                  <CheckboxOutline
+                    onClick={() => setCheckConfirm(index)}
+                    width="30px"
+                    height="30px"
+                    color="green"
+                    style={pointerStyle}
+                  />
+                )}
+                <TrashOutline
+                  onClick={() => setRemoveConfirm(index)}
+                  width={"30px"}
+                  height="30px"
+                  color={list.completed ? "#fff" : "tomato"}
+                  style={pointerStyle}
+                />
+              </div>
+            </ItemStyle>
+          );
       })}
-    </ListStyle>
+    </BucketDiv>
   );
 };
 
-const ListStyle = styled.div`
+const BucketDiv = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
