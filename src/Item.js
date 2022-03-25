@@ -11,7 +11,7 @@ import { deleteBucket, updateBucket } from "./redux/modules/bucket";
 
 const Item = (props) => {
   const { id, text, completed } = props;
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [isDone, setIsDone] = useState(completed);
   const [isProcessing, setIsProcessing] = useState(null);
 
@@ -21,14 +21,11 @@ const Item = (props) => {
   const pointerStyle = {
     cursor: "pointer",
   };
-  const testStyle = {
-    padding: "0 100px 0 0",
-  };
 
-  // 미완료, 완료 버킷 색깔 리턴
+  // 버킷 배경색 리턴
   const bucketColor = (isDone, isProcessing) => {
     if (isProcessing)
-      return isProcessing !== "삭제할까요?" ? "#17ef1769" : "#ff57228f";
+      return isProcessing !== "삭제할까요?" ? "#ff5e57ba" : "#ff57228f";
     else return isDone ? "#a673ff" : "aliceblue";
   };
 
@@ -44,9 +41,12 @@ const Item = (props) => {
   };
 
   return (
-    <ItemStyle bgColor={() => bucketColor(isDone, isProcessing)}>
-      <span style={(pointerStyle, testStyle)}>
-        {isProcessing ? isProcessing : text}
+    <ItemStyle
+      textColor={completed}
+      bgColor={() => bucketColor(isDone, isProcessing)}
+    >
+      <span onClick={() => navigate(`/detail/${id}`)}>
+        {!isProcessing ? text : isProcessing}
       </span>
       <div>
         {!isProcessing ? (
@@ -55,7 +55,7 @@ const Item = (props) => {
               width="30px"
               height="30px"
               color="green"
-              style={pointerStyle}
+              style={{ display: isDone ? "none" : "", cursor: "pointer" }}
               onClick={() => {
                 setIsProcessing("완료할까요?");
               }}
@@ -63,7 +63,7 @@ const Item = (props) => {
             <TrashOutline
               width={"30px"}
               height="30px"
-              color={"tomato"}
+              color={isDone ? "#eee" : "red"}
               style={pointerStyle}
               onClick={() => {
                 setIsProcessing("삭제할까요?");
@@ -99,6 +99,9 @@ const ItemStyle = styled.div`
   justify-content: space-between;
   padding: 16px;
   margin: 8px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: ${(props) => (props.textColor ? "#fff" : "black")};
   background-color: ${({ bgColor }) => bgColor};
 `;
 

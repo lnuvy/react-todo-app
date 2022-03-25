@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
-import BucketList from "./BucketList";
+import BucketList from "./pages/BucketList";
 import styled from "styled-components";
 import { Route, Routes } from "react-router-dom";
-import Detail from "./Detail";
+import Detail from "./pages/Detail";
 import { useDispatch } from "react-redux";
 import { createBucket } from "./redux/modules/bucket";
 import Progress from "./Progress";
@@ -57,6 +57,7 @@ const Container = styled.div`
   width: 60vw;
   max-width: 350px;
   min-height: 60vh;
+  max-height: 60vh;
   margin: auto;
   padding: 16px;
   border: 1px solid #ddd;

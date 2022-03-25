@@ -1,28 +1,30 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { deleteBucket, updateBucket } from "./redux/modules/bucket";
+import { deleteBucket, updateBucket } from "../redux/modules/bucket";
 
 const Detail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams();
-  const bucket_index = parseInt(params.index);
-  const bucket_list = useSelector((state) => state.bucket.list);
+  const { index: id } = params;
+  const bucket = useSelector((state) => state.bucket.list).filter(
+    (list) => list.id === id
+  )[0];
 
   return (
     <div>
-      <h1>{bucket_list[bucket_index].text}</h1>
+      <h1>{bucket.text}</h1>
       <button
         onClick={() => {
-          dispatch(updateBucket(bucket_index));
+          dispatch(updateBucket(id));
         }}
       >
         완료하기
       </button>
       <button
         onClick={() => {
-          dispatch(deleteBucket(bucket_index));
+          dispatch(deleteBucket(id));
           navigate("/");
         }}
       >

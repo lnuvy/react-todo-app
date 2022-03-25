@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 
-import { deleteBucket, updateBucket } from "./redux/modules/bucket";
-import Item from "./Item";
+import { deleteBucket, updateBucket } from "../redux/modules/bucket";
+import Item from "../Item";
 
 const BucketList = () => {
   const navigate = useNavigate();
@@ -21,20 +21,6 @@ const BucketList = () => {
 
   const handleCancel = () => {};
 
-  const handleConfirm = (index, type) => {
-    console.log(type);
-    switch (type) {
-      case "check":
-        dispatch(updateBucket(index));
-        break;
-      case "remove":
-        dispatch(deleteBucket(index));
-        break;
-      default:
-        return;
-    }
-  };
-
   return (
     <BucketDiv>
       {my_lists.map(({ id, text, completed }, i) => {
@@ -47,10 +33,9 @@ const BucketList = () => {
 const BucketDiv = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
-  height: 50vh;
+  height: 70%;
 `;
 
 export default BucketList;
