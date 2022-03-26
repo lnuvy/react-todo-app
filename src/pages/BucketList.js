@@ -8,18 +8,11 @@ import { deleteBucket, updateBucket } from "../redux/modules/bucket";
 import Item from "../Item";
 
 const BucketList = () => {
-  const navigate = useNavigate();
   const my_lists = useSelector((state) => state.bucket.list);
-  const dispatch = useDispatch();
 
   const pointerStyle = {
     cursor: "pointer",
   };
-  const testStyle = {
-    padding: "0 100px 0 0",
-  };
-
-  const handleCancel = () => {};
 
   return (
     <BucketDiv>
