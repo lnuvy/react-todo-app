@@ -13,8 +13,6 @@ const BucketList = () => {
     setList(my_lists);
   }, [my_lists]);
 
-  console.log(list);
-
   return (
     <BucketDiv>
       {list.map(({ id, text, completed }) => {

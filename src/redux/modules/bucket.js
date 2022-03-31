@@ -76,18 +76,9 @@ export const loadBucketFB = () => {
 
 export const AddBucketFB = (data) => {
   return async (dispatch) => {
-    // const docRef = await addDoc(collection(db, "bucket"), {
-    //   ...data,
-    //   completed: false,
-    // });
-    // const _data = await getDoc(docRef);
-    // const bucket = { ..._data.data() };
-    // console.log(bucket);
-    // dispatch(createBucket(bucket));
     const _data = { ...data, completed: false };
     await setDoc(doc(bucket_db, data.id), _data);
     dispatch(createBucket(_data));
-    // console.log(_data);
   };
 };
 

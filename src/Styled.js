@@ -8,6 +8,42 @@ const BucketDiv = styled.div`
   height: 75%;
 `;
 
+const InputWrap = styled.div`
+  background-color: #fff;
+  max-width: 350px;
+  width: 60vw;
+  min-width: 300px;
+  min-height: 10vh;
+  padding: 16px;
+  margin: 20px auto;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  & > * {
+    padding: 5px;
+    font-size: 1.1rem;
+  }
+  & input {
+    border: 1px solid #888;
+    width: 70%;
+    height: 50%;
+    margin-right: 10px;
+    padding: 0 0 0 20px;
+  }
+  & input:focus {
+    outline: none;
+    border: 1px solid #a673ff;
+  }
+  & button {
+    height: 50%;
+    width: 25%;
+    color: #fff;
+    border: #a673ff;
+    background: #a673ff;
+  }
+`;
+
 const ItemStyle = styled.div`
   display: flex;
   align-items: center;
@@ -20,4 +56,4 @@ const ItemStyle = styled.div`
   background-color: ${({ bgColor }) => bgColor};
 `;
 
-export { BucketDiv, ItemStyle };
+export { BucketDiv, InputWrap, ItemStyle };
