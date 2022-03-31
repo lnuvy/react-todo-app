@@ -5,14 +5,10 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 
 import { deleteBucket, updateBucket } from "../redux/modules/bucket";
-import Item from "../Item";
+import Item from "../components/Item";
 
 const BucketList = () => {
   const my_lists = useSelector((state) => state.bucket.list);
-
-  const pointerStyle = {
-    cursor: "pointer",
-  };
 
   return (
     <BucketDiv>

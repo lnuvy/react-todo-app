@@ -1,28 +1,32 @@
-import React, { useRef } from "react";
-import BucketList from "./pages/BucketList";
+import React, { useEffect, useRef } from "react";
+import { BucketList, Detail, NotFound } from "./pages";
+import "./App.css";
 import styled from "styled-components";
 import { Route, Routes } from "react-router-dom";
-import Detail from "./pages/Detail";
 import { useDispatch } from "react-redux";
-import { createBucket } from "./redux/modules/bucket";
+import { AddBucketFB, loadBucketFB } from "./redux/modules/bucket";
 import Progress from "./Progress";
-import NotFound from "./NotFound";
-import { db } from "./firebase";
 
 function App() {
   const text = useRef(null);
   const dispatch = useDispatch();
 
-  console.log(db);
-
   const addBucket = () => {
-    dispatch(createBucket(text.current.value));
+    dispatch(
+      AddBucketFB({ id: new Date().getTime() + "", text: text.current.value })
+    );
   };
 
+  useEffect(() => {
+    dispatch(loadBucketFB());
+  }, [dispatch]);
+
   return (
-    <AppWrap>
+    <div className="App">
       <Container>
-        <Title>버킷 리스트</Title>
+        <Title>
+          버킷 리스트<button>필터</button>
+        </Title>
         <Progress />
         <Line />
         <Routes>
@@ -39,17 +43,9 @@ function App() {
         />
         <button onClick={addBucket}>추가하기</button>
       </InputWrap>
-    </AppWrap>
+    </div>
   );
 }
-
-const AppWrap = styled.div`
-  background-color: #eee;
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  flex-direction: column;
-`;
 
 const Container = styled.div`
   background-color: #fff;
@@ -58,7 +54,6 @@ const Container = styled.div`
   max-width: 350px;
   min-height: 60vh;
   max-height: 60vh;
-  margin: auto;
   padding: 16px;
   border: 1px solid #ddd;
   border-radius: 5px;

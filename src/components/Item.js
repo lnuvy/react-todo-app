@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-import { CheckboxOutline } from "react-ionicons";
-import { TrashOutline } from "react-ionicons";
-import { CheckmarkOutline } from "react-ionicons";
-import { CloseOutline } from "react-ionicons";
+import { IoIosCheckboxOutline } from "react-icons/io";
+import { IoMdTrash } from "react-icons/io";
+import { IoIosCheckmark } from "react-icons/io";
+import { IoIosClose } from "react-icons/io";
 import { useDispatch } from "react-redux";
-import { deleteBucket, updateBucket } from "./redux/modules/bucket";
+import { deleteBucket, updateBucket } from "../redux/modules/bucket";
 
 const Item = (props) => {
   const { id, text, completed } = props;
@@ -18,14 +18,23 @@ const Item = (props) => {
   const dispatch = useDispatch();
 
   // css속성
-  const pointerStyle = {
+  const iconStyle = {
     cursor: "pointer",
+    width: "30px",
+    height: "30px",
+  };
+
+  const doneIconStyle = {
+    cursor: "pointer",
+    width: "30px",
+    height: "30px",
+    display: `${isDone ? "none" : ""}`,
   };
 
   // 버킷 배경색 리턴
   const bucketColor = (isDone, isProcessing) => {
     if (isProcessing)
-      return isProcessing !== "삭제할까요?" ? "#ff5e57ba" : "#ff57228f";
+      return isProcessing !== "삭제할까요?" ? "#7fff7fc4" : "#ff57228f";
     else return isDone ? "#a673ff" : "aliceblue";
   };
 
@@ -34,10 +43,11 @@ const Item = (props) => {
   };
 
   const handleConfirm = () => {
-    if (isProcessing === "삭제할까요?") dispatch(deleteBucket(id));
-    else dispatch(updateBucket(id));
-    setIsProcessing(null);
-    setIsDone(true);
+    // if (isProcessing === "삭제할까요?") dispatch(deleteBucket(id));
+    // else dispatch(updateBucket(id));
+    // setIsProcessing(null);
+    // setIsDone(true);
+    console.log("여기 이제 수정해야합니다");
   };
 
   return (
@@ -51,20 +61,16 @@ const Item = (props) => {
       <div>
         {!isProcessing ? (
           <>
-            <CheckboxOutline
-              width="30px"
-              height="30px"
+            <IoIosCheckboxOutline
               color="green"
-              style={{ display: isDone ? "none" : "", cursor: "pointer" }}
+              style={doneIconStyle}
               onClick={() => {
                 setIsProcessing("완료할까요?");
               }}
             />
-            <TrashOutline
-              width={"30px"}
-              height="30px"
+            <IoMdTrash
               color={isDone ? "#eee" : "red"}
-              style={pointerStyle}
+              style={iconStyle}
               onClick={() => {
                 setIsProcessing("삭제할까요?");
               }}
@@ -72,20 +78,12 @@ const Item = (props) => {
           </>
         ) : (
           <>
-            <CheckmarkOutline
-              width="30px"
-              height="30px"
+            <IoIosCheckmark
               color="green"
-              style={pointerStyle}
+              style={iconStyle}
               onClick={handleConfirm}
             />
-            <CloseOutline
-              width="30px"
-              height="30px"
-              color="red"
-              style={pointerStyle}
-              onClick={handleCancel}
-            />
+            <IoIosClose color="red" style={iconStyle} onClick={handleCancel} />
           </>
         )}
       </div>
