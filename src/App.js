@@ -26,7 +26,7 @@ function App() {
   useEffect(() => {
     if (filter) dispatch(filterBucket(list));
     else dispatch(loadBucketFB());
-  }, [filter]);
+  }, [filterText]);
 
   const addBucket = () => {
     dispatch(
