@@ -6,7 +6,6 @@ const Progress = () => {
   const bucket_list = useSelector((state) => state.bucket.list);
 
   let count = 0;
-  console.log(bucket_list);
   bucket_list.forEach((b) => {
     if (b.completed) {
       count++;

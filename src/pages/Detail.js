@@ -1,6 +1,6 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteBucket, updateBucket } from "../redux/modules/bucket";
 
 const Detail = () => {
@@ -8,6 +8,7 @@ const Detail = () => {
   const navigate = useNavigate();
   const params = useParams();
   const { index: id } = params;
+
   const bucket = useSelector((state) => state.bucket.list).filter(
     (list) => list.id === id
   )[0];

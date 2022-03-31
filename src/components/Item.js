@@ -1,21 +1,23 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-
-import { IoIosCheckboxOutline } from "react-icons/io";
-import { IoMdTrash } from "react-icons/io";
-import { IoIosCheckmark } from "react-icons/io";
-import { IoIosClose } from "react-icons/io";
 import { useDispatch } from "react-redux";
-import { deleteBucket, updateBucket } from "../redux/modules/bucket";
+import { deleteBucketFB, doneBucketFB } from "../redux/modules/bucket";
+
+import { ItemStyle } from "../Styled";
+import {
+  IoIosCheckboxOutline,
+  IoMdTrash,
+  IoIosCheckmark,
+  IoIosClose,
+} from "react-icons/io";
 
 const Item = (props) => {
   const { id, text, completed } = props;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [isDone, setIsDone] = useState(completed);
   const [isProcessing, setIsProcessing] = useState(null);
-
-  const dispatch = useDispatch();
 
   // css속성
   const iconStyle = {
@@ -43,11 +45,12 @@ const Item = (props) => {
   };
 
   const handleConfirm = () => {
-    // if (isProcessing === "삭제할까요?") dispatch(deleteBucket(id));
-    // else dispatch(updateBucket(id));
-    // setIsProcessing(null);
-    // setIsDone(true);
     console.log("여기 이제 수정해야합니다");
+    console.log(completed);
+    if (isProcessing === "완료할까요?") dispatch(doneBucketFB(id, !completed));
+    else dispatch(deleteBucketFB(id));
+    setIsProcessing(null);
+    setIsDone(true);
   };
 
   return (
@@ -90,17 +93,5 @@ const Item = (props) => {
     </ItemStyle>
   );
 };
-
-const ItemStyle = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px;
-  margin: 8px;
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: ${(props) => (props.textColor ? "#fff" : "black")};
-  background-color: ${({ bgColor }) => bgColor};
-`;
 
 export default Item;

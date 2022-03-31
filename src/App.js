@@ -1,15 +1,32 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { Route, Routes } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  AddBucketFB,
+  filterBucket,
+  loadBucketFB,
+} from "./redux/modules/bucket";
 import { BucketList, Detail, NotFound } from "./pages";
+import { Progress } from "./components";
+
 import "./App.css";
 import styled from "styled-components";
-import { Route, Routes } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { AddBucketFB, loadBucketFB } from "./redux/modules/bucket";
-import Progress from "./Progress";
 
+//
 function App() {
   const text = useRef(null);
   const dispatch = useDispatch();
+
+  const [filter, setFilter] = useState(false);
+
+  const filterText = filter ? "전체 보기" : "해야할 것만 보기";
+
+  const list = useSelector((state) => state.bucket.list);
+
+  useEffect(() => {
+    if (filter) dispatch(filterBucket(list));
+    else dispatch(loadBucketFB());
+  }, [filter]);
 
   const addBucket = () => {
     dispatch(
@@ -17,17 +34,24 @@ function App() {
     );
   };
 
-  useEffect(() => {
-    dispatch(loadBucketFB());
-  }, [dispatch]);
+  const pressEnter = (e) => {
+    if (e.keyCode === 13) addBucket();
+  };
 
   return (
     <div className="App">
       <Container>
         <Title>
-          버킷 리스트<button>필터</button>
+          버킷 리스트
+          <button
+            onClick={() => {
+              setFilter(!filter);
+            }}
+          >
+            {filterText}
+          </button>
         </Title>
-        <Progress />
+        {filter ? null : <Progress />}
         <Line />
         <Routes>
           <Route path="/" element={<BucketList />} />
@@ -40,6 +64,7 @@ function App() {
           type="text"
           ref={text}
           placeholder="추가할 버킷을 입력하세요..."
+          onKeyUp={pressEnter}
         />
         <button onClick={addBucket}>추가하기</button>
       </InputWrap>

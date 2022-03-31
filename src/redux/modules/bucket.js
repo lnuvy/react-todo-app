@@ -1,9 +1,7 @@
 import { db } from "../../firebase";
 import {
   collection,
-  getDoc,
   getDocs,
-  addDoc,
   doc,
   updateDoc,
   deleteDoc,
@@ -17,6 +15,7 @@ import {
 // Actions
 const LOAD = "bucket/LOAD";
 const LOAD_MORE = "bucket/LOAD_MORE";
+const FILTER = "bucket/FILTER";
 const CREATE = "bucket/CREATE";
 const DONE = "bucket/DONE";
 const UPDATE = "bucket/UPDATE";
@@ -36,6 +35,10 @@ const initialState = {
 // Action Creators
 export const loadBucket = (bucket, lastList) => {
   return { type: LOAD, bucket, lastList };
+};
+
+export const filterBucket = (bucket) => {
+  return { type: FILTER, bucket };
 };
 
 export function createBucket(bucket) {
@@ -88,9 +91,19 @@ export const AddBucketFB = (data) => {
   };
 };
 
-export const doneBucketFB = (id) => {
+export const doneBucketFB = (id, state) => {
   return async (dispatch) => {
-    // const
+    const docRef = doc(db, "bucket", id);
+    await updateDoc(docRef, { completed: state });
+    dispatch(doneBucket(id));
+  };
+};
+
+export const deleteBucketFB = (id) => {
+  return async (dispatch) => {
+    const docRef = doc(db, "bucket", id);
+    await deleteDoc(docRef);
+    dispatch(deleteBucket(id));
   };
 };
 
@@ -99,6 +112,10 @@ export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case "bucket/LOAD": {
       return { list: action.bucket, lastList: action.lastList };
+    }
+    case "bucket/FILTER": {
+      const new_list = action.bucket.filter((l) => !l.completed);
+      return { list: new_list };
     }
     case "bucket/CREATE": {
       const new_bucket_list = [

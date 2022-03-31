@@ -1,30 +1,24 @@
-// 리액트 패키지를 불러옵니다.
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
-
-import { deleteBucket, updateBucket } from "../redux/modules/bucket";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import Item from "../components/Item";
+
+import { BucketDiv } from "../Styled";
 
 const BucketList = () => {
   const my_lists = useSelector((state) => state.bucket.list);
+  const [list, setList] = useState(my_lists);
+
+  // 어떻게하면 비동기로 연동된 데이터를 state로 넣을수 있는지
+  // useEffect(async () => {
+  //   await setList(my_lists);
+  // }, [list]);
 
   return (
     <BucketDiv>
-      {my_lists.map(({ id, text, completed }, i) => {
+      {my_lists.map(({ id, text, completed }) => {
         return <Item key={id} id={id} text={text} completed={completed} />;
       })}
     </BucketDiv>
   );
 };
-
-const BucketDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  overflow-x: hidden;
-  overflow-y: auto;
-  height: 70%;
-`;
-
 export default BucketList;
