@@ -13,11 +13,9 @@ const Search = () => {
     else dispatch(loadBucketFB(list));
   }, [filter]);
 
-  console.log(list);
-
   return (
     <>
-      <input type="text" />
+      {/* <input type="text" /> */}
       <button
         style={{ position: "absolute", top: "20px" }}
         onClick={() => {
